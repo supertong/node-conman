@@ -4,15 +4,15 @@
     "strictNullChecks": true,
     "allowJs": true,
     "target": "es6",
-    "module": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "rootDir": "src",
     "outDir": "dist",
     "lib": [
         "es6",
-        "es2015.promise"
-    ],
-    "noEmit": true
+        "es2015.promise",
+        "dom"
+    ]
   },
   "compileOnSave": true
 }

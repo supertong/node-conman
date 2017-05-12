@@ -1,17 +1,21 @@
 import * as EC2 from "aws-sdk/clients/ec2";
 import * as AWS from "aws-sdk/global";
+import * as Rx from "rxjs";
+import * as Vorpal from "vorpal";
+import { InstanceObservable } from "./observables/InstanceObservable";
 
-const defaultConfig = new AWS.Config({
-  credentials: {
-    accessKeyId: "",
-    secretAccessKey: "",
-  },
-  region: "ap-southeast-2",
-});
+const vorpal = Vorpal();
 
-const ec2 = new EC2(defaultConfig);
+vorpal.delimiter("conman$").show();
 
-ec2.describeInstances({
-  DryRun: false,
-  MaxResults: 10,
-});
+// const defaultConfig = new AWS.Config({
+//   credentials: {
+//     accessKeyId: "",
+//     secretAccessKey: "",
+//   },
+//   region: "ap-southeast-2",
+// });
+
+// InstanceObservable(defaultConfig).subscribe((value) => {
+//   console.log(value.InstanceId);
+// });
