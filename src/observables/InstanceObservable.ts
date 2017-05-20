@@ -33,13 +33,14 @@ const createStream = (config: AWS.Config) => {
     return Rx.Observable.defer(() => {
       return chunk(nextToken)
         .flatMap((value: EC2.DescribeInstancesResult) => {
-          const instanceData = Rx.Observable.from(value.Reservations || [])
+          const instanceData = Rx.Observable.from(value.Reservations || [], Rx.Scheduler.asap)
             /**
              * We want the Observable to return each EC2.Instance Data instead of the EC2.Reservation
              */
             .flatMap((reservation: EC2.Reservation) => {
               return Rx.Observable.from(reservation.Instances || []);
-            });
+            })
+            .defaultIfEmpty();
           const nextChunk = value.NextToken ? fetchInstances(value.NextToken) : Rx.Observable.empty();
 
           /**
@@ -48,7 +49,7 @@ const createStream = (config: AWS.Config) => {
            */
           return Rx.Observable.concat(instanceData, nextChunk);
       });
-    });
+    }).defaultIfEmpty("shit");
   };
 
   return fetchInstances();
